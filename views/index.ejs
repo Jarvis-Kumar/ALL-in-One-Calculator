@@ -1,0 +1,141 @@
+<%- include('layout', { title: 'Home', body: `
+<div class="text-center mb-12">
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16 rounded-2xl mb-8">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Allin1Calculator</h1>
+        <p class="text-xl md:text-2xl mb-8">Your Ultimate Calculator Platform</p>
+        <p class="text-lg opacity-90 max-w-2xl mx-auto px-4">
+            From financial planning to geometry problems, we've got all your calculation needs covered in one place!
+        </p>
+    </div>
+</div>
+
+<!-- Quick Calculator -->
+<div class="bg-white rounded-xl shadow-lg p-6 mb-12 max-w-md mx-auto">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Quick Calculator</h2>
+    <div class="space-y-4">
+        <input type="text" id="quick-calc-display" class="w-full p-4 text-xl border-2 border-gray-200 rounded-lg text-right bg-gray-50" readonly>
+        <div class="grid grid-cols-4 gap-2">
+            <button onclick="clearCalc()" class="calculator-btn bg-red-500 hover:bg-red-600 text-white col-span-2">Clear</button>
+            <button onclick="deleteLast()" class="calculator-btn bg-yellow-500 hover:bg-yellow-600 text-white">⌫</button>
+            <button onclick="appendToDisplay('/')" class="calculator-btn bg-blue-500 hover:bg-blue-600 text-white">÷</button>
+            
+            <button onclick="appendToDisplay('7')" class="calculator-btn">7</button>
+            <button onclick="appendToDisplay('8')" class="calculator-btn">8</button>
+            <button onclick="appendToDisplay('9')" class="calculator-btn">9</button>
+            <button onclick="appendToDisplay('*')" class="calculator-btn bg-blue-500 hover:bg-blue-600 text-white">×</button>
+            
+            <button onclick="appendToDisplay('4')" class="calculator-btn">4</button>
+            <button onclick="appendToDisplay('5')" class="calculator-btn">5</button>
+            <button onclick="appendToDisplay('6')" class="calculator-btn">6</button>
+            <button onclick="appendToDisplay('-')" class="calculator-btn bg-blue-500 hover:bg-blue-600 text-white">-</button>
+            
+            <button onclick="appendToDisplay('1')" class="calculator-btn">1</button>
+            <button onclick="appendToDisplay('2')" class="calculator-btn">2</button>
+            <button onclick="appendToDisplay('3')" class="calculator-btn">3</button>
+            <button onclick="appendToDisplay('+')" class="calculator-btn bg-blue-500 hover:bg-blue-600 text-white">+</button>
+            
+            <button onclick="appendToDisplay('0')" class="calculator-btn col-span-2">0</button>
+            <button onclick="appendToDisplay('.')" class="calculator-btn">.</button>
+            <button onclick="calculate()" class="calculator-btn bg-green-500 hover:bg-green-600 text-white">=</button>
+        </div>
+    </div>
+</div>
+
+<!-- Search Bar -->
+<div class="max-w-2xl mx-auto mb-12">
+    <div class="relative">
+        <input type="text" id="search-input" placeholder="Search calculators..." 
+               class="w-full p-4 pr-12 text-lg border-2 border-gray-200 rounded-xl focus:border-primary focus:outline-none">
+        <i data-lucide="search" class="absolute right-4 top-4 w-6 h-6 text-gray-400"></i>
+    </div>
+</div>
+
+<!-- Calculator Categories -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <a href="/financial" class="category-card rounded-xl p-8 text-white text-center calculator-card">
+        <i data-lucide="dollar-sign" class="w-16 h-16 mx-auto mb-4"></i>
+        <h3 class="text-2xl font-bold mb-2">Financial</h3>
+        <p class="text-lg opacity-90">Interest, Currency, Investment & More</p>
+        <p class="text-sm mt-2 opacity-75">7 Calculators</p>
+    </a>
+    
+    <a href="/health" class="category-card rounded-xl p-8 text-white text-center calculator-card">
+        <i data-lucide="heart" class="w-16 h-16 mx-auto mb-4"></i>
+        <h3 class="text-2xl font-bold mb-2">Health & Fitness</h3>
+        <p class="text-lg opacity-90">BMI, BMR, Calories & More</p>
+        <p class="text-sm mt-2 opacity-75">5 Calculators</p>
+    </a>
+    
+    <a href="/conversion" class="category-card rounded-xl p-8 text-white text-center calculator-card">
+        <i data-lucide="repeat" class="w-16 h-16 mx-auto mb-4"></i>
+        <h3 class="text-2xl font-bold mb-2">Conversion</h3>
+        <p class="text-lg opacity-90">Length, Time, Age & More</p>
+        <p class="text-sm mt-2 opacity-75">8 Calculators</p>
+    </a>
+    
+    <a href="/geometry" class="category-card rounded-xl p-8 text-white text-center calculator-card">
+        <i data-lucide="triangle" class="w-16 h-16 mx-auto mb-4"></i>
+        <h3 class="text-2xl font-bold mb-2">Geometry</h3>
+        <p class="text-lg opacity-90">Shapes, Area, Volume & More</p>
+        <p class="text-sm mt-2 opacity-75">12 Calculators</p>
+    </a>
+    
+    <a href="/math" class="category-card rounded-xl p-8 text-white text-center calculator-card">
+        <i data-lucide="sigma" class="w-16 h-16 mx-auto mb-4"></i>
+        <h3 class="text-2xl font-bold mb-2">Math & Algebra</h3>
+        <p class="text-lg opacity-90">Complex Numbers, Equations & More</p>
+        <p class="text-sm mt-2 opacity-75">10 Calculators</p>
+    </a>
+    
+    <div class="category-card rounded-xl p-8 text-white text-center calculator-card">
+        <i data-lucide="zap" class="w-16 h-16 mx-auto mb-4"></i>
+        <h3 class="text-2xl font-bold mb-2">Coming Soon</h3>
+        <p class="text-lg opacity-90">More categories in development</p>
+        <p class="text-sm mt-2 opacity-75">Stay tuned!</p>
+    </div>
+</div>
+
+<style>
+    .calculator-btn {
+        @apply p-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-semibold transition-colors text-lg;
+    }
+</style>
+
+<script>
+let display = document.getElementById('quick-calc-display');
+let currentInput = '';
+
+function appendToDisplay(value) {
+    currentInput += value;
+    display.value = currentInput;
+}
+
+function clearCalc() {
+    currentInput = '';
+    display.value = '';
+}
+
+function deleteLast() {
+    currentInput = currentInput.slice(0, -1);
+    display.value = currentInput;
+}
+
+function calculate() {
+    try {
+        let result = eval(currentInput.replace(/×/g, '*').replace(/÷/g, '/'));
+        display.value = result;
+        currentInput = result.toString();
+    } catch (error) {
+        display.value = 'Error';
+        currentInput = '';
+    }
+}
+
+// Search functionality
+document.getElementById('search-input').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    // This could be enhanced to filter calculators
+    console.log('Searching for:', searchTerm);
+});
+</script>
+`}) %>

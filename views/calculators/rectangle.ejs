@@ -1,0 +1,71 @@
+<%- include('../layout', { title: title, body: `
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Rectangle Calculator</h1>
+    
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <form id="rectangle-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Length</label>
+                <input type="number" name="length" step="any" min="0" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="Enter length">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Width</label>
+                <input type="number" name="width" step="any" min="0" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="Enter width">
+            </div>
+            
+            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-semibold">
+                Calculate Rectangle Properties
+            </button>
+        </form>
+        
+        <div id="result" class="hidden mt-8 p-6 result-display rounded-lg">
+            <h3 class="text-xl font-bold mb-4">Rectangle Properties:</h3>
+            <div class="space-y-2">
+                <p>Area: <span id="area"></span> square units</p>
+                <p>Perimeter: <span id="perimeter"></span> units</p>
+                <p>Diagonal: <span id="diagonal"></span> units</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+        <a href="/geometry" class="inline-flex items-center px-4 py-2 text-primary hover:text-blue-600">
+            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            Back to Geometry Calculators
+        </a>
+    </div>
+</div>
+
+<script>
+document.getElementById('rectangle-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/geometry/rectangle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        document.getElementById('area').textContent = result.area;
+        document.getElementById('perimeter').textContent = result.perimeter;
+        document.getElementById('diagonal').textContent = result.diagonal;
+        document.getElementById('result').classList.remove('hidden');
+    } catch (error) {
+        alert('Error calculating rectangle properties');
+    }
+});
+</script>
+`}) %>

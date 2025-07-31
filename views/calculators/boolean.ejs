@@ -1,0 +1,83 @@
+<%- include('../layout', { title: title, body: `
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Boolean Algebra Calculator</h1>
+    
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <form id="boolean-form" class="space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Value A</label>
+                    <select name="a" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Value B</label>
+                    <select name="b" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Operation</label>
+                <select name="operation" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="and">AND (A ∧ B)</option>
+                    <option value="or">OR (A ∨ B)</option>
+                    <option value="not_a">NOT A (¬A)</option>
+                    <option value="xor">XOR (A ⊕ B)</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-semibold">
+                Calculate Boolean Result
+            </button>
+        </form>
+        
+        <div id="result" class="hidden mt-8 p-6 result-display rounded-lg">
+            <h3 class="text-xl font-bold mb-4">Boolean Result:</h3>
+            <div class="space-y-2">
+                <p class="text-2xl font-bold">Result: <span id="boolean-result"></span></p>
+                <p>Operation: <span id="operation-type"></span></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+        <a href="/math" class="inline-flex items-center px-4 py-2 text-primary hover:text-blue-600">
+            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            Back to Math Calculators
+        </a>
+    </div>
+</div>
+
+<script>
+document.getElementById('boolean-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/math/boolean', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        document.getElementById('boolean-result').textContent = result.result ? 'TRUE' : 'FALSE';
+        document.getElementById('operation-type').textContent = result.operation.toUpperCase();
+        document.getElementById('result').classList.remove('hidden');
+    } catch (error) {
+        alert('Error calculating boolean operation');
+    }
+});
+</script>
+`}) %>

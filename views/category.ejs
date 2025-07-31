@@ -1,0 +1,35 @@
+<%
+// Build the calculators grid HTML
+let calculatorsHTML = '';
+calculators.forEach(function(calc) {
+    calculatorsHTML += `
+        <a href="${calc.url}" class="bg-white rounded-lg shadow-md p-6 calculator-card hover:shadow-lg transition-all">
+            <div class="text-center">
+                <i data-lucide="${calc.icon}" class="w-12 h-12 mx-auto mb-4 text-primary"></i>
+                <h3 class="text-lg font-semibold text-gray-800">${calc.name}</h3>
+            </div>
+        </a>
+    `;
+});
+
+// Build the complete body HTML
+const bodyHTML = `
+<div class="mb-8">
+    <h1 class="text-4xl font-bold text-gray-800 mb-4">${category}</h1>
+    <p class="text-xl text-gray-600">${description}</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    ${calculatorsHTML}
+</div>
+
+<div class="mt-12 text-center">
+    <a href="/" class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors">
+        <i data-lucide="home" class="w-5 h-5 mr-2"></i>
+        Back to Home
+    </a>
+</div>
+`;
+%>
+
+<%- include('layout', { title: title, body: bodyHTML }) %>

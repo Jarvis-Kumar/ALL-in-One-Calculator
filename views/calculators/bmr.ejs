@@ -1,0 +1,100 @@
+<%- include('../layout', { title: title, body: `
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">BMR Calculator</h1>
+    
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <form id="bmr-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Unit System</label>
+                <select name="unit" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="metric">Metric (kg, cm)</option>
+                    <option value="imperial">Imperial (lbs, inches)</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                <select name="gender" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Age (years)</label>
+                <input type="number" name="age" min="1" max="120" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Weight</label>
+                <input type="number" name="weight" step="0.1" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="Enter weight">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Height</label>
+                <input type="number" name="height" step="0.1" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="Enter height">
+            </div>
+            
+            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-semibold">
+                Calculate BMR
+            </button>
+        </form>
+        
+        <div id="result" class="hidden mt-8 p-6 result-display rounded-lg">
+            <h3 class="text-xl font-bold mb-4">Your BMR Results:</h3>
+            <div class="space-y-2">
+                <p class="text-2xl font-bold">BMR: <span id="bmr-value"></span> calories/day</p>
+                <h4 class="text-lg font-semibold mt-4">Daily Calorie Needs:</h4>
+                <p>Sedentary: <span id="sedentary"></span> calories</p>
+                <p>Light Activity: <span id="light"></span> calories</p>
+                <p>Moderate Activity: <span id="moderate"></span> calories</p>
+                <p>Active: <span id="active"></span> calories</p>
+                <p>Very Active: <span id="very-active"></span> calories</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+        <a href="/health" class="inline-flex items-center px-4 py-2 text-primary hover:text-blue-600">
+            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            Back to Health Calculators
+        </a>
+    </div>
+</div>
+
+<script>
+document.getElementById('bmr-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/health/bmr', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        document.getElementById('bmr-value').textContent = result.bmr;
+        document.getElementById('sedentary').textContent = result.sedentary;
+        document.getElementById('light').textContent = result.light;
+        document.getElementById('moderate').textContent = result.moderate;
+        document.getElementById('active').textContent = result.active;
+        document.getElementById('very-active').textContent = result.veryActive;
+        document.getElementById('result').classList.remove('hidden');
+    } catch (error) {
+        alert('Error calculating BMR');
+    }
+});
+</script>
+`}) %>

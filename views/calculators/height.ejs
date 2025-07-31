@@ -1,0 +1,99 @@
+<%- include('../layout', { title: title, body: `
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Height Converter</h1>
+    
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <form id="height-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Conversion Type</label>
+                <select id="conversion-type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <option value="to-cm">Feet/Inches to Centimeters</option>
+                    <option value="to-feet">Centimeters to Feet/Inches</option>
+                </select>
+            </div>
+            
+            <div id="feet-inches-input" class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Feet</label>
+                    <input type="number" name="feet" min="0" step="1" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Inches</label>
+                    <input type="number" name="inches" min="0" max="11" step="0.1" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+            </div>
+            
+            <div id="cm-input" class="hidden">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Centimeters</label>
+                <input type="number" name="cm" min="0" step="0.1" 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+            
+            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-semibold">
+                Convert Height
+            </button>
+        </form>
+        
+        <div id="result" class="hidden mt-8 p-6 result-display rounded-lg">
+            <h3 class="text-xl font-bold mb-4">Height Conversion:</h3>
+            <div class="space-y-2">
+                <p>Feet: <span id="result-feet"></span></p>
+                <p>Inches: <span id="result-inches"></span></p>
+                <p>Centimeters: <span id="result-cm"></span></p>
+                <p>Total Inches: <span id="result-total-inches"></span></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+        <a href="/conversion" class="inline-flex items-center px-4 py-2 text-primary hover:text-blue-600">
+            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            Back to Conversion Calculators
+        </a>
+    </div>
+</div>
+
+<script>
+document.getElementById('conversion-type').addEventListener('change', function() {
+    const feetInchesInput = document.getElementById('feet-inches-input');
+    const cmInput = document.getElementById('cm-input');
+    
+    if (this.value === 'to-cm') {
+        feetInchesInput.classList.remove('hidden');
+        cmInput.classList.add('hidden');
+    } else {
+        feetInchesInput.classList.add('hidden');
+        cmInput.classList.remove('hidden');
+    }
+});
+
+document.getElementById('height-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/conversion/height', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        document.getElementById('result-feet').textContent = result.feet;
+        document.getElementById('result-inches').textContent = result.inches;
+        document.getElementById('result-cm').textContent = result.cm;
+        document.getElementById('result-total-inches').textContent = result.totalInches;
+        document.getElementById('result').classList.remove('hidden');
+    } catch (error) {
+        alert('Error converting height');
+    }
+});
+</script>
+`}) %>

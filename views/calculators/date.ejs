@@ -1,0 +1,73 @@
+<%- include('../layout', { title: title, body: `
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Date Calculator</h1>
+    
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <form id="date-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                <input type="date" name="startDate" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                <input type="date" name="endDate" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+            </div>
+            
+            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-semibold">
+                Calculate Date Difference
+            </button>
+        </form>
+        
+        <div id="result" class="hidden mt-8 p-6 result-display rounded-lg">
+            <h3 class="text-xl font-bold mb-4">Date Difference:</h3>
+            <div class="space-y-2">
+                <p class="text-2xl font-bold"><span id="days"></span> days</p>
+                <div class="mt-4 space-y-1">
+                    <p>Weeks: <span id="weeks"></span></p>
+                    <p>Months: <span id="months"></span></p>
+                    <p>Years: <span id="years"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+        <a href="/conversion" class="inline-flex items-center px-4 py-2 text-primary hover:text-blue-600">
+            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            Back to Conversion Calculators
+        </a>
+    </div>
+</div>
+
+<script>
+document.getElementById('date-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/conversion/date', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        document.getElementById('days').textContent = result.days;
+        document.getElementById('weeks').textContent = result.weeks;
+        document.getElementById('months').textContent = result.months;
+        document.getElementById('years').textContent = result.years;
+        document.getElementById('result').classList.remove('hidden');
+    } catch (error) {
+        alert('Error calculating date difference');
+    }
+});
+</script>
+`}) %>

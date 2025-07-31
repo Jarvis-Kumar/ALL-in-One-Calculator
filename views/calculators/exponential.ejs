@@ -1,0 +1,69 @@
+<%- include('../layout', { title: title, body: `
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Exponential Calculator</h1>
+    
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <form id="exponential-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Base</label>
+                <input type="number" name="base" step="any" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="Enter base number">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Exponent</label>
+                <input type="number" name="exponent" step="any" required 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                       placeholder="Enter exponent">
+            </div>
+            
+            <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-semibold">
+                Calculate Power
+            </button>
+        </form>
+        
+        <div id="result" class="hidden mt-8 p-6 result-display rounded-lg">
+            <h3 class="text-xl font-bold mb-4">Exponential Result:</h3>
+            <div class="space-y-2">
+                <p><span id="base-value"></span><sup><span id="exponent-value"></span></sup> = <span id="result-value" class="text-2xl font-bold"></span></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+        <a href="/math" class="inline-flex items-center px-4 py-2 text-primary hover:text-blue-600">
+            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+            Back to Math Calculators
+        </a>
+    </div>
+</div>
+
+<script>
+document.getElementById('exponential-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/math/exponential', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        document.getElementById('base-value').textContent = result.base;
+        document.getElementById('exponent-value').textContent = result.exponent;
+        document.getElementById('result-value').textContent = result.result;
+        document.getElementById('result').classList.remove('hidden');
+    } catch (error) {
+        alert('Error calculating exponential');
+    }
+});
+</script>
+`}) %>
